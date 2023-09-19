@@ -1,9 +1,22 @@
 # Gender-and-Age-Detection   <img alt="GitHub" src="https://img.shields.io/github/license/smahesh29/Gender-and-Age-Detection">
 
+<h2>Fork for school </h2>
 
-<h2>Objective :</h2>
-<p>To build a gender and age detector that can approximately guess the gender and age of the person (face) in a picture or through webcam.</p>
+<p>
+for a school assignment we needed a database full of fake people and data about them <br>
+I thought it would be a fun idea to use https://thispersondoesnotexist.com/ for the profile pictures.
+however we also wanted to have masculine names to be used on males and feminine names for females.
+so I used this project to detect if the person in the image is a female or male and store it in a csv
+it also has a socket for the backend to communicate with.
 
+credits to smahesh29 for this project  ofcourse
+and credits to https://github.com/jaisylau/Socket-Programming-in-Python/tree/master for some of the socket 
+</p>
+
+
+<h2>Objective :</h2>guess the gender and age of the person (face) in a picture or through webcam.</p>
+
+<p>To build a gender and age detector that can approximately 
 <h2>About the Project :</h2>
 <p>In this Python Project, I had used Deep Learning to accurately identify the gender and age of a person from a single image of a face. I used the models trained by <a href="https://talhassner.github.io/home/projects/Adience/Adience-data.html">Tal Hassner and Gil Levi</a>. The predicted gender may be one of ‘Male’ and ‘Female’, and the predicted age may be one of the following ranges- (0 – 2), (4 – 6), (8 – 12), (15 – 20), (25 – 32), (38 – 43), (48 – 53), (60 – 100) (8 nodes in the final softmax layer). It is very difficult to accurately guess an exact age from a single image because of factors like makeup, lighting, obstructions, and facial expressions. And so, I made this a classification problem instead of making it one of regression.</p>
 
