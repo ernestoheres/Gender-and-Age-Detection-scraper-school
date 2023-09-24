@@ -19,5 +19,7 @@ for i in range(500):
         writer.writerow(data)
     print(gender, f"image{i}.jpg")
     
-    time.sleep(random.randint(50,87))
+    time.sleep(random.randint(20,87))
+
+
 

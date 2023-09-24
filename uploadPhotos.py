@@ -4,6 +4,7 @@ from random import randint
 import socket, select
 from time import gmtime, strftime
 import base64
+import os
 
 #unix socket request vanuit laravel factory?
 #daarin vraagt laravel om een geslacht 
@@ -15,7 +16,7 @@ import base64
 # en je check je nog een keer lukt het nog steeds niet herhaal je het
 
 def search_gender(gender):
-    with open('img/data.csv', 'r') as f:
+    with open('img/data.csv', 'r') as f, open('img/data_temp.csv', 'w') as f2:
         for row in f.readlines():
             columns = row.split(',')
        
@@ -25,7 +26,13 @@ def search_gender(gender):
             try:
                 if gender in columns[1]:
                     print("here")
+                    #remove line from csv
+                    writer = csv.writer(f2)
+                    writer.writerow(row)
+                    os.rename('img/data_temp.csv', 'img/data.csv')
                     return columns[0]
+                   
+                    
             except:
                 continue #bad data
 
@@ -75,7 +82,9 @@ def main():
     while True:
         try:
             data=connection.recv(600000).decode()
-            rM=''
+            if not data:
+                break
+            rM=''.encode('utf-8')
             if data.split(' ')[0] == "GET":
                 print("GET")
                 if data.endswith("T"):
