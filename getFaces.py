@@ -13,13 +13,13 @@ for i in range(500):
     result = result.stdout.split('\n')
     gender = result[0]
     print(gender)
-    with open('img/data.csv', 'a') as f:
+    with open('img/data.csv', 'a', newline='') as f:
         writer = csv.writer(f)
         data = [f"image{i}.jpg", gender]
         writer.writerow(data)
     print(gender, f"image{i}.jpg")
     
-    time.sleep(random.randint(20,87))
+    time.sleep(random.randint(5,12))
 
 
 

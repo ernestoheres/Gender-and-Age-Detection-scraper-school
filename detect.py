@@ -66,12 +66,12 @@ while cv2.waitKey(1)<0 :
         genderNet.setInput(blob)
         genderPreds=genderNet.forward()
         gender=genderList[genderPreds[0].argmax()]
-        print(f'Gender: {gender}')
+        print(gender)
 
         ageNet.setInput(blob)
         agePreds=ageNet.forward()
         age=ageList[agePreds[0].argmax()]
-        print(f'Age: {age[1:-1]} years')
+        #print(f'Age: {age[1:-1]} years')
 
         cv2.putText(resultImg, f'{gender}, {age}', (faceBox[0], faceBox[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2, cv2.LINE_AA)
         #cv2.imshow("Detecting age and gender", resultImg)

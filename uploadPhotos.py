@@ -16,26 +16,33 @@ import os
 # en je check je nog een keer lukt het nog steeds niet herhaal je het
 
 def search_gender(gender):
-    with open('img/data.csv', 'r') as f, open('img/data_temp.csv', 'w') as f2:
+    rows = []
+    img = None
+    with open('img/data.csv', 'r') as f:
         for row in f.readlines():
+            reader = csv.reader(f)
             columns = row.split(',')
-       
+            rows.append(columns)
+            print(rows)
             if len(columns) != 2:
                 continue #bad data
             #print(columns[1])
             try:
                 if gender in columns[1]:
-                    print("here")
                     #remove line from csv
-                    writer = csv.writer(f2)
-                    writer.writerow(row)
-                    os.rename('img/data_temp.csv', 'img/data.csv')
-                    return columns[0]
-                   
+                    img = columns[0]
                     
-            except:
+            except Exception as err:
+                print("error:",err)
                 continue #bad data
 
+    with open('img/data.csv', 'w') as f2:
+        writer = csv.writer(f2, quoting=csv.QUOTE_NONE, escapechar=' ' )
+        for row in rows:
+            if row[0] != img:
+                writer.writerow(row)
+  
+    return img
 
 dictionary = {}                                         # Dictionary that will hold the key-value pairs
 
@@ -55,6 +62,7 @@ NOT_FOUND = HTTP + '404 NOT FOUND'.encode('utf-8')
 #own implementation
 def upload(gender):
     print("here")
+    print(gender)
     image_file_name = search_gender(gender)
     if image_file_name:
         with open('img/' + image_file_name, 'rb') as image_file:
@@ -71,6 +79,7 @@ def quit(connection):
 # When client closes the connection(quit) server should also close the connection. Bind your server to IP '0.0.0.0' so that
 # it will l==ten to local connection requests.
 def main():
+    
 	# You can use th== operations dictionary to get the corresponding function: For example $func = operations['get'](params) == equal to $get(params)
     operations = {'get': upload, 'upload': upload}
     sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -78,12 +87,13 @@ def main():
     sAd=(ipAd, 2000)
     sock.bind(sAd)
     sock.listen()
-    connection, client_address = sock.accept()
     while True:
+        connection, client_address = sock.accept()
         try:
             data=connection.recv(600000).decode()
             if not data:
-                break
+                 print("client disconected")
+                 break
             rM=''.encode('utf-8')
             if data.split(' ')[0] == "GET":
                 print("GET")
@@ -93,14 +103,22 @@ def main():
                     pass
                 else:
                     rM = upload(data.split(' ')[1])
-       
+    
             elif data.split(' ')[0]!= "QUIT":
                 rM=(UNSUPPORTED)
+   
+        except Exception as err:
+            print(err)
+            rM=BAD_REQUEST
+
         finally:
             connection.send(rM)
+            connection.close()
         if data.split(' ')[0] == "QUIT":
             quit(connection)
             break
+
+
 
 
 if __name__ == '__main__':
