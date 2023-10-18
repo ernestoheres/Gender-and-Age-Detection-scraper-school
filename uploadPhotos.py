@@ -1,10 +1,8 @@
 import requests
-import csv
+import json
 from random import randint
 import socket, select
 from time import gmtime, strftime
-import base64
-import os
 
 #unix socket request vanuit laravel factory?
 #daarin vraagt laravel om een geslacht 
@@ -18,30 +16,24 @@ import os
 def search_gender(gender):
     rows = []
     img = None
-    with open('img/data.csv', 'r') as f:
-        for row in f.readlines():
-            reader = csv.reader(f)
-            columns = row.split(',')
-            rows.append(columns)
-            print(rows)
-            if len(columns) != 2:
-                continue #bad data
-            #print(columns[1])
-            try:
-                if gender in columns[1]:
-                    #remove line from csv
-                    img = columns[0]
-                    
-            except Exception as err:
-                print("error:",err)
-                continue #bad data
 
-    with open('img/data.csv', 'w') as f2:
-        writer = csv.writer(f2, quoting=csv.QUOTE_NONE, escapechar=' ' )
-        for row in rows:
-            if row[0] != img:
-                writer.writerow(row)
-  
+    # Read JSON data
+    with open('img/data.json', 'r') as f:
+        data = json.load(f)
+
+    found = False
+
+    for entry in data:
+        if 'gender' in entry and gender in entry['gender'] and not found:
+            img = entry['img']
+            found = True
+        else:
+            rows.append(entry)
+
+    # Write updated JSON data
+    with open('img/data.json', 'w') as f2:
+        json.dump(rows, f2, indent=4)
+
     return img
 
 dictionary = {}                                         # Dictionary that will hold the key-value pairs

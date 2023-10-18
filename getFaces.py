@@ -1,10 +1,12 @@
 import requests
 import subprocess
 import time
-import csv
+import json
 import random
 
-for i in range(500):
+data_list = []
+
+for i in range(20):
     r = requests.get('https://thispersondoesnotexist.com/')
     with open(f"img/image{i}.jpg", 'wb') as f:
         f.write(r.content)
@@ -13,13 +15,14 @@ for i in range(500):
     result = result.stdout.split('\n')
     gender = result[0]
     print(gender)
-    with open('img/data.csv', 'a', newline='') as f:
-        writer = csv.writer(f)
-        data = [f"image{i}.jpg", gender]
-        writer.writerow(data)
-    print(gender, f"image{i}.jpg")
-    
+    data = {
+        "img": f"image{i}.jpg",
+        "gender": gender
+    }
+    data_list.append(data)
+
     time.sleep(random.randint(5,12))
 
-
-
+with open('img/data.json', 'w') as f:
+   json.dump(data_list, f, indent=4)
+    
